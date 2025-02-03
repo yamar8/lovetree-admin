@@ -109,87 +109,110 @@ const List = ({ token }) => {
 
   return (
     <>
-      <p className='mb-2'>All Products List</p>
+      <p className='mb-2 text-sm md:text-base'>All Products List</p>
       <div className='flex flex-col gap-2'>
-        {/* ------- List Table Title ---------- */}
-        <div className='hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm'>
+        {/* Table Header */}
+        <div className='hidden md:grid grid-cols-[1fr_2fr_2fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm'>
           <b>Image</b>
           <b>Name</b>
+          <b>Description</b>
           <b>Category</b>
           <b>Price</b>
           <b className='text-center'>Action</b>
         </div>
+  
         <form>
-          {editMode === false ? (
-            <p
-              onClick={() => {
-              setEditMode(true)
-              dispatch({ type: 'INITIALIZE', payload: list }); // Initialize formData with list
-              }}
-              
-              className='text-right md:text-center cursor-pointer text-lg'
-            >
-              Edit Mode
-            </p>
-          ) : (
-            <p
-              onClick={() => editProduct()}
-              className='text-right md:text-center cursor-pointer text-lg'
-            >
-              Save
-            </p>
-          )}
-          {/* ------ Product List ------ */}
+          {/* Edit/Save Toggle */}
+          <div className='px-2'>
+            {editMode === false ? (
+              <p
+                onClick={() => {
+                  setEditMode(true);
+                  dispatch({ type: 'INITIALIZE', payload: list });
+                }}
+                className='text-right md:text-center cursor-pointer text-sm md:text-lg text-blue-600 hover:text-blue-800'
+              >
+                Edit Mode
+              </p>
+            ) : (
+              <div className='flex justify-between items-center'>
+                <p
+                  onClick={() => setEditMode(false)}
+                  className='cursor-pointer text-sm md:text-lg text-red-600 hover:text-red-800'
+                >
+                  Cancel
+                </p>
+                <p
+                  onClick={() => editProduct()}
+                  className='cursor-pointer text-sm md:text-lg text-green-600 hover:text-green-800'
+                >
+                  Save
+                </p>
+              </div>
+            )}
+          </div>
+  
+          {/* Product List */}
           {list.map((item, index) => (
-            <div key={index}>
+            <div key={index} className='border rounded-lg p-2 mb-2'>
               {editMode === false ? (
-                <div className='grid grid-cols-[1fr_3fr_1fr_1fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm'>
+                // View Mode
+                <div className='md:grid md:grid-cols-[1fr_2fr_2fr_1fr_1fr_1fr] items-center gap-2'>
                   <img
-                    className='w-12'
-                    onClick={() => console.log('Yossef')}
+                    className='w-16 mx-auto md:w-12'
                     src={item.image[0]}
                     alt=''
                   />
-                  <div>
-                    <p>{item.name}</p>
-                    <p>{item.description}</p>
-                  </div>
-                  <p>{item.category}</p>
-                  <p>{currency}{item.price}</p>
+                  <p className='font-semibold text-sm'>{item.name}</p>
+                  <p className='text-xs text-gray-600'>{item.description}</p>
+                  <p className='text-sm md:text-base'>{item.category}</p>
+                  <p className='text-sm md:text-base'>{currency}{item.price}</p>
+                  <div /> {/* Empty spacer for grid alignment */}
                 </div>
               ) : (
-                <div className='grid grid-cols-[1fr_3fr_1fr_1fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm'>
-                  <img className='w-12' src={item.image[0]} alt='' />
-                  <div className='flex flex-col'>
-                    <input
-                      name='name'
-                      onChange={(e) => handleChange(item._id, index, e)}
-                      defaultValue={item.name}
-                    />
-                    <input
-                      name='description'
-                      onChange={(e) => handleChange(item._id, index, e)}
-                      defaultValue={item.description}
-                    />
-                  </div>
+                // Edit Mode
+                <div className='md:grid md:grid-cols-[1fr_2fr_2fr_1fr_1fr_1fr] items-center gap-2'>
+                  <img className='w-16 mx-auto md:w-12' src={item.image[0]} alt='' />
+                  
+                  {/* Name Input */}
+                  <input
+                    name='name'
+                    onChange={(e) => handleChange(item._id, index, e)}
+                    defaultValue={item.name}
+                    className='w-full p-1 text-sm border rounded'
+                  />
+                  
+                  {/* Description Input */}
+                  <input
+                    name='description'
+                    onChange={(e) => handleChange(item._id, index, e)}
+                    defaultValue={item.description}
+                    className='w-full p-1 text-sm border rounded'
+                  />
+                  
+                  {/* Category Input */}
                   <input
                     name='category'
                     onChange={(e) => handleChange(item._id, index, e)}
                     defaultValue={item.category}
-                    className='w-full px-3 py-2 sm:w-[120px]'
+                    className='w-full p-1 text-sm border rounded'
                     type='text'
                   />
+                  
+                  {/* Price Input */}
                   <input
                     name='price'
                     onChange={(e) => handleChange(item._id, index, e)}
                     defaultValue={item.price}
-                    className='w-full px-3 py-2 sm:w-[120px]'
+                    className='w-full p-1 text-sm border rounded'
                     type='number'
                   />
-                  <div>
+                  
+                  {/* Delete Button */}
+                  <div className='text-center'>
                     <p
                       onClick={() => removeProduct(item._id)}
-                      className='text-right md:text-center cursor-pointer text-lg'
+                      className='text-red-600 hover:text-red-800 cursor-pointer text-sm'
                     >
                       Delete
                     </p>
@@ -202,6 +225,5 @@ const List = ({ token }) => {
       </div>
     </>
   );
-};
-
+}
 export default List;
