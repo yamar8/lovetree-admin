@@ -1,7 +1,32 @@
 import axios from 'axios';
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { backendUrl, currency } from '../App';
 import { toast } from 'react-toastify';
+
+const ImageModal = ({ images, onClose }) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+         onClick={onClose}>
+      <div className="bg-white rounded-lg p-4 max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Product Images</h2>
+          <button onClick={onClose} className="text-2xl">&times;</button>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {images.filter(Boolean).map((img, index) => (
+            <img 
+              key={index}
+              src={img}
+              alt={`Product view ${index + 1}`}
+              className="w-full h-32 object-cover rounded"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 // Reducer function to manage formData state
 const formDataReducer = (state, action) => {
@@ -30,6 +55,8 @@ const formDataReducer = (state, action) => {
 const List = ({ token }) => {
   const [list, setList] = React.useState([]);
   const [editMode, setEditMode] = React.useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedProductImages, setSelectedProductImages] = useState([]);
 
   // Initialize formData using useReducer
   const [formData, dispatch] = useReducer(formDataReducer, []);
@@ -37,6 +64,7 @@ const List = ({ token }) => {
   const fetchList = async () => {
     try {
       const response = await axios.get(backendUrl + '/api/product/list');
+      console.log("response: ", response)
       if (response.data.success) {
         setList(response.data.products.reverse());
       } else {
@@ -99,6 +127,11 @@ const List = ({ token }) => {
     });
   };
 
+  const handleImageClick = (images) => {
+    setSelectedProductImages(images);
+    setShowImageModal(true);
+  };
+
   useEffect(() => {
     console.log(formData);
   }, [formData]);
@@ -151,18 +184,19 @@ const List = ({ token }) => {
               </div>
             )}
           </div>
-  
+              
           {/* Product List */}
           {list.map((item, index) => (
             <div key={index} className='border rounded-lg p-2 mb-2'>
               {editMode === false ? (
                 // View Mode
                 <div className='md:grid md:grid-cols-[1fr_2fr_2fr_1fr_1fr_1fr] items-center gap-2'>
-                  <img
-                    className='w-16 mx-auto md:w-12'
-                    src={item.image[0]}
-                    alt=''
-                  />
+  <img
+    className='w-16 mx-auto md:w-12 cursor-pointer'
+    src={item.image[0]}
+    alt=''
+    onClick={() => handleImageClick(item.image)}
+  />
                   <p className='font-semibold text-sm'>{item.name}</p>
                   <p className='text-xs text-gray-600'>{item.description}</p>
                   <p className='text-sm md:text-base'>{item.category}</p>
@@ -172,7 +206,12 @@ const List = ({ token }) => {
               ) : (
                 // Edit Mode
                 <div className='md:grid md:grid-cols-[1fr_2fr_2fr_1fr_1fr_1fr] items-center gap-2'>
-                  <img className='w-16 mx-auto md:w-12' src={item.image[0]} alt='' />
+                    <img 
+                    className='w-16 mx-auto md:w-12 cursor-pointer'
+                    src={item.image[0]}
+                    alt=''
+                     onClick={() => handleImageClick(item.image)}
+  />
                   
                   {/* Name Input */}
                   <input
@@ -219,10 +258,18 @@ const List = ({ token }) => {
                   </div>
                 </div>
               )}
+              
             </div>
+            
           ))}
         </form>
       </div>
+      {showImageModal && (
+        <ImageModal
+          images={selectedProductImages}
+          onClose={() => setShowImageModal(false)}
+        />
+      )}
     </>
   );
 }
