@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Categories from './pages/Categories'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import Settings from './pages/Settings'
+
 
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
@@ -45,7 +47,7 @@ const App = () => {
 
   return (
     <div className='bg-gray-50 min-h-screen'>
-      <ToastContainer />
+      <ToastContainer rtl={true}/>
       {token === ""
         ? <Login setToken={setToken} />
         : <>
@@ -59,6 +61,7 @@ const App = () => {
                 <Route path='/categories' element={<Categories categories = {categories} token={token } />} />
                 <Route path='/list' element={<List token={token} />} />
                 <Route path='/orders' element={<Orders token={token} />} />
+                <Route path='/settings' element={<Settings/> }/>
               </Routes>
             </div>
           </div>

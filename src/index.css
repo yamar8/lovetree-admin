@@ -17,3 +17,20 @@ select,input,textarea{
     background-color: #ffebf5;
     border-color: #C586A5;
 }
+
+/* Add smooth transitions for direction changes */
+body {
+  transition: all 0.3s ease;
+}
+
+/* RTL specific adjustments */
+html[dir="rtl"] {
+  /* Override any specific LTR margins/paddings if needed */
+  .ml-auto { margin-right: auto !important; margin-left: 0 !important; }
+  .mr-auto { margin-left: auto !important; margin-right: 0 !important; }
+  
+  /* Flip icons if needed */
+  .flip-in-rtl {
+    transform: scaleX(-1);
+  }
+}

@@ -3,6 +3,8 @@ import { assets } from '../assets/assets'
 import axios from 'axios'
 import { backendUrl } from '../App'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next';
+
 
 const Add = ({ token, categories }) => {
   const [image1, setImage1] = useState(false)
@@ -19,6 +21,7 @@ const Add = ({ token, categories }) => {
   const [sizes, setSizes] = useState([])
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false)
   const [newCategoryName, setNewCategoryName] = useState('')
+  const {t} = useTranslation();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
@@ -72,7 +75,7 @@ const Add = ({ token, categories }) => {
     <div>
       <form onSubmit={onSubmitHandler} className='flex flex-col w-full items-start gap-3'>
         <div>
-          <p className='mb-2'>Upload Image</p>
+          <p className='mb-2'>{t('addProduct.uploadImage')}</p>
           <div className='flex gap-2'>
             <label htmlFor="image1">
               <img
@@ -110,31 +113,31 @@ const Add = ({ token, categories }) => {
         </div>
 
         <div className='w-full'>
-          <p className='mb-2'>Product name</p>
+          <p className='mb-2'>{t('addProduct.productName')}</p>
           <input
             onChange={(e) => setName(e.target.value)}
             value={name}
             className='w-full max-w-[500px] px-3 py-2'
             type="text"
-            placeholder='Type here'
+            placeholder={t('addProduct.typeHere')}
             required
           />
         </div>
 
         <div className='w-full'>
-          <p className='mb-2'>Product description</p>
+          <p className='mb-2'>{t('addProduct.productDescription')}</p>
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             className='w-full max-w-[500px] px-3 py-2'
-            placeholder='Write content here'
+            placeholder={t('addProduct.writeContentHere')}
             required
           />
         </div>
 
         <div className='flex flex-col sm:flex-row gap-2 w-full sm:gap-8'>
           <div>
-            <p className='mb-2'>Product category</p>
+            <p className='mb-2'>{t('addProduct.productCategory')}</p>
             <select onChange={handleCategoryChange} className='w-full px-3 py-2'>
               <option defaultValue key="choose" value='choose'></option>
               {Array.from(new Set(categories.map(item => item.category))).map((cat) => (
@@ -151,7 +154,7 @@ const Add = ({ token, categories }) => {
           </div>
 
           <div>
-            <p className='mb-2'>Sub category</p>
+            <p className='mb-2'>{t('addProduct.subCategory')}</p>
             <select onChange={(e) => setSubCategory(e.target.value)} className='w-full px-3 py-2'>
               <option value="Topwear">Topwear</option>
               <option value="Bottomwear">Bottomwear</option>
@@ -160,7 +163,7 @@ const Add = ({ token, categories }) => {
           </div>
 
           <div>
-            <p className='mb-2'>Product Price</p>
+            <p className='mb-2'>{t('addProduct.productPrice')}</p>
             <input
               onChange={(e) => setPrice(e.target.value)}
               value={price}
@@ -172,7 +175,7 @@ const Add = ({ token, categories }) => {
         </div>
 
         <div>
-          <p className='mb-2'>Product Sizes</p>
+          <p className='mb-2'>{t('addProduct.productSizes')}</p>
           <div className='flex gap-3'>
             {["S", "M", "L", "XL", "XXL"].map((size) => (
               <div
@@ -195,23 +198,23 @@ const Add = ({ token, categories }) => {
 
         <div className='flex gap-2 mt-2'>
           <input onChange={() => setBestseller(prev => !prev)} checked={bestseller} type="checkbox" id='bestseller' />
-          <label className='cursor-pointer' htmlFor="bestseller">Add to bestseller</label>
+          <label className='cursor-pointer' htmlFor="bestseller">{t('addProduct.addToBestseller')}</label>
         </div>
 
-        <button type="submit" className='w-28 py-3 mt-4 bg-black text-white'>ADD</button>
+        <button type="submit" className='w-28 py-3 mt-4 bg-black text-white'>{t('addProduct.add')}</button>
       </form>
 
       {/* Modal for New Category */}
       {showNewCategoryModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-md shadow-md w-80">
-            <h2 className="text-xl font-bold mb-4">Add New Category</h2>
+            <h2 className="text-xl font-bold mb-4">{t('addProduct.addNewCategory')}</h2>
             <input
               type="text"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
               className="border p-2 w-full"
-              placeholder="Enter new category"
+              placeholder={t('addProduct.enterNewCategory')}
             />
             <div className="flex justify-end gap-2 mt-4">
               <button
@@ -221,7 +224,7 @@ const Add = ({ token, categories }) => {
                 }}
                 className="px-4 py-2 bg-gray-300 rounded"
               >
-                Cancel
+                {t('addProduct.cancel')}
               </button>
               <button
                 onClick={() => {
@@ -234,7 +237,7 @@ const Add = ({ token, categories }) => {
                 }}
                 className="px-4 py-2 bg-blue-500 text-white rounded"
               >
-                Save
+                {t('addProduct.save')}
               </button>
             </div>
           </div>

@@ -5,10 +5,12 @@ import axios from 'axios'
 import { backendUrl, currency } from '../App'
 import { toast } from 'react-toastify'
 import { assets } from '../assets/assets'
+import { useTranslation } from 'react-i18next'
 
 const Orders = ({ token }) => {
 
   const [orders, setOrders] = useState([])
+  const { t } = useTranslation()
 
   const fetchAllOrders = async () => {
 
@@ -50,7 +52,7 @@ const Orders = ({ token }) => {
 
   return (
     <div>
-      <h3>Order Page</h3>
+      <h3>{t('orders.orderPage')}</h3>
       <div>
         {
           orders.map((order, index) => (
@@ -75,18 +77,18 @@ const Orders = ({ token }) => {
                 <p>{order.address.phone}</p>
               </div>
               <div>
-                <p className='text-sm sm:text-[15px]'>Items : {order.items.length}</p>
-                <p className='mt-3'>Method : {order.paymentMethod}</p>
-                <p>Payment : { order.payment ? 'Done' : 'Pending' }</p>
-                <p>Date : {new Date(order.date).toLocaleDateString()}</p>
+                <p className='text-sm sm:text-[15px]'>{t('orders.items')}: {order.items.length}</p>
+                <p className='mt-3'>{t('orders.method')}: {order.paymentMethod}</p>
+                <p>{t('orders.payment')}: {order.payment ? t('orders.done') : t('orders.pending')}</p>
+                <p>{t('orders.date')}: {new Date(order.date).toLocaleDateString()}</p>
               </div>
               <p className='text-sm sm:text-[15px]'>{currency}{order.amount}</p>
               <select onChange={(event)=>statusHandler(event,order._id)} value={order.status} className='p-2 font-semibold'>
-                <option value="Order Placed">Order Placed</option>
-                <option value="Packing">Packing</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Out for delivery">Out for delivery</option>
-                <option value="Delivered">Delivered</option>
+                <option value="Order Placed">{t('orders.status.orderPlaced')}</option>
+                <option value="Packing">{t('orders.status.packing')}</option>
+                <option value="Shipped">{t('orders.status.shipped')}</option>
+                <option value="Out for delivery">{t('orders.status.outForDelivery')}</option>
+                <option value="Delivered">{t('orders.status.delivered')}</option>
               </select>
             </div>
           ))
